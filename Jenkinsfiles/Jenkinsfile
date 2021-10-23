@@ -1,0 +1,29 @@
+pipeline {
+    environment {
+        GITHUB_CREDENTIALS = credentials('git_hub')
+    }
+    agent {
+        docker {
+         image "index.docker.io/python:3"
+         args "-u root"
+        }
+    }         
+    stages {
+        stage('Clone repo') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId:'private_key', keyFileVariable: 'my_key')]) {
+                        sh """
+                           mkdir -p /root/.ssh;  
+                           cp '${my_key}' /root/.ssh/id_rsa;
+                           chmod 600 /root/.ssh/id_rsa;
+                           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts;
+                           git clone git@github.com:brahim19961920/Jenkins.git  /root/tests;
+                           ls /root/tests
+                        """
+                    } 
+                }  
+            }
+        }
+    }
+} 
