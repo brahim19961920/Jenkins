@@ -4,7 +4,7 @@ pipeline {
     }
     agent {
         docker {
-         image "index.docker.io/python:3"
+         image "index.docker.io/brahim1996/bba:latest"
          args "-u root"
         }
     }         
@@ -19,7 +19,8 @@ pipeline {
                            chmod 600 /root/.ssh/id_rsa;
                            ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts;
                            git clone git@github.com:brahim19961920/Jenkins.git  /root/tests;
-                           ls /root/tests
+                           ls /root/tests;
+                           which python;
                         """
                     } 
                 }  
